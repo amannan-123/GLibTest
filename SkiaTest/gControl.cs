@@ -18,6 +18,7 @@ namespace SkiaTest
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 			SetStyle(ControlStyles.UserPaint, true);
 			SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+			SetStyle(ControlStyles.ResizeRedraw, true);
 		}
 	}
 }

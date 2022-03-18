@@ -113,7 +113,7 @@ namespace SkiaTest
 		/// <param name="ctrl">1 for SKGL, 2 for SK and 3 for GDI+.</param>
 		void startBenchmarking(int ctrl)
 		{
-
+			btnSettings.Enabled = false;
 			renderTimesMsec.Clear();
 			Control control;
 			string msg;
@@ -140,6 +140,8 @@ namespace SkiaTest
 					return;
 			}
 
+			lstResults.Items.Add(msg);
+
 			Application.DoEvents(); //Process all messages to get better results.
 
 			Stopwatch stopwatch = new();
@@ -153,8 +155,13 @@ namespace SkiaTest
 
 				renderTimesMsec.Add(1000.0 * stopwatch.ElapsedTicks / Stopwatch.Frequency);
 				double mean = renderTimesMsec.Sum() / renderTimesMsec.Count;
-				label1.Text = $"Mean for {msg}{mean:0.000} ms";
+				lstResults.Items.Add($"{renderTimesMsec.Count:00}. " +
+					$"{renderTimesMsec.Last():0.000} ms " +
+					$"(running mean: {mean:0.000} ms)");
+				lstResults.SelectedIndex = lstResults.Items.Count - 1;
 			}
+
+			btnSettings.Enabled = true;
 		}
 
 		#endregion
@@ -187,15 +194,18 @@ namespace SkiaTest
 			startBenchmarking(3);
 		}
 
-		private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+		private void btnSettings_Click(object sender, EventArgs e)
 		{
-			Lines = (int)numericUpDown1.Value;
+			SettingsDialog st = new();
+			st.nRuns.Value = Runs;
+			st.nLines.Value = Lines;
+			st.btnVSync.Checked = skglControl1.VSync;
+			if (st.ShowDialog() == DialogResult.OK)
+			{
+				Runs = (int)st.nRuns.Value;
+				Lines = (int)st.nLines.Value;
+				skglControl1.VSync = st.btnVSync.Checked;
+			}
 		}
-
-		private void numericUpDown2_ValueChanged(object sender, EventArgs e)
-		{
-			Runs = (int)numericUpDown2.Value;
-		}
-
 	}
 }
