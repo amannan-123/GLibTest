@@ -113,7 +113,7 @@
             0});
 			this.nLines.Location = new System.Drawing.Point(121, 153);
 			this.nLines.Maximum = new decimal(new int[] {
-            10000,
+            50000,
             0,
             0,
             0});
@@ -183,6 +183,7 @@
 			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
 			this.Name = "SettingsDialog";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Settings";
 			((System.ComponentModel.ISupportInitialize)(this.nRuns)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.nLines)).EndInit();

@@ -10,6 +10,7 @@ namespace SkiaTest
 
 		public int Lines { get; set; }
 		public int Runs { get; set; }
+		public bool StopFlag = false;
 
 		public MainForm()
 		{
@@ -114,6 +115,8 @@ namespace SkiaTest
 		void startBenchmarking(int ctrl)
 		{
 			btnSettings.Enabled = false;
+			btnStart.Enabled = false;
+			btnStop.Enabled = true;
 			renderTimesMsec.Clear();
 			Control control;
 			string msg;
@@ -148,6 +151,9 @@ namespace SkiaTest
 			for (int i = 0; i < Runs; i++)
 			{
 
+				if (StopFlag)
+					break;
+
 				stopwatch.Restart();
 				control.Invalidate();
 				Application.DoEvents();
@@ -162,6 +168,8 @@ namespace SkiaTest
 			}
 
 			btnSettings.Enabled = true;
+			btnStart.Enabled = true;
+			btnStop.Enabled = false;
 		}
 
 		#endregion
@@ -179,21 +187,6 @@ namespace SkiaTest
 			gControl1.Dispose();
 		}
 
-		private void button1_Click(object sender, EventArgs e)
-		{
-			startBenchmarking(1);
-		}
-
-		private void button2_Click(object sender, EventArgs e)
-		{
-			startBenchmarking(2);
-		}
-
-		private void button3_Click(object sender, EventArgs e)
-		{
-			startBenchmarking(3);
-		}
-
 		private void btnSettings_Click(object sender, EventArgs e)
 		{
 			SettingsDialog st = new();
@@ -206,6 +199,21 @@ namespace SkiaTest
 				Lines = (int)st.nLines.Value;
 				skglControl1.VSync = st.btnVSync.Checked;
 			}
+		}
+
+		private void btnStart_Click(object sender, EventArgs e)
+		{
+			int _ct = 0;
+			if (rbSKGL.Checked) _ct = 1;
+			if (rbSK.Checked) _ct = 2;
+			if (rbGDI.Checked) _ct = 3;
+			StopFlag = false;
+			startBenchmarking(_ct);
+		}
+
+		private void btnStop_Click(object sender, EventArgs e)
+		{
+			StopFlag = true;
 		}
 	}
 }
