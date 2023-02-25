@@ -1,6 +1,6 @@
 ﻿namespace SkiaTest
 {
-	partial class gControl
+	partial class DoubleBufferedControl
 	{
 		/// <summary> 
 		/// Required designer variable.

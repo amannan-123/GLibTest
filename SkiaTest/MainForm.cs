@@ -1,5 +1,7 @@
 using SkiaSharp;
+using System;
 using System.Diagnostics;
+using unvell.D2DLib;
 
 namespace SkiaTest
 {
@@ -45,6 +47,7 @@ namespace SkiaTest
 				float y2 = (float)(rand.NextDouble() * skglControl1.Height);
 				canvas.DrawLine(x1, y1, x2, y2, paint);
 			}
+			paint.Dispose();
 
 		}
 
@@ -74,6 +77,7 @@ namespace SkiaTest
 				float y2 = (float)(rand.NextDouble() * skControl1.Height);
 				canvas.DrawLine(x1, y1, x2, y2, paint);
 			}
+			paint.Dispose();
 
 		}
 
@@ -101,7 +105,30 @@ namespace SkiaTest
 				float y2 = (float)(rand.NextDouble() * skControl1.Height);
 				g.DrawLine(paint, x1, y1, x2, y2);
 			}
+			paint.Dispose();
 
+		}
+
+		private void d2dTest1_OnRendering(Object sender, D2DGraphics g)
+		{
+			g.Antialias = true;
+			g.Clear(D2DColor.Red);
+			for (int i = 0; i < Lines; i++)
+			{
+				D2DColor randCol = new(
+					(float)rand.Next(100) / 100,
+					(float)rand.Next(100) / 100,
+					(float)rand.Next(100) / 100,
+					(float)rand.Next(100) / 100);
+
+				int penWidth = rand.Next(1, 10);
+
+				float x1 = (float)(rand.NextDouble() * d2dTest1.Width);
+				float x2 = (float)(rand.NextDouble() * d2dTest1.Width);
+				float y1 = (float)(rand.NextDouble() * d2dTest1.Height);
+				float y2 = (float)(rand.NextDouble() * d2dTest1.Height);
+				g.DrawLine(x1, x2, y1, y2, randCol, penWidth);
+			}
 		}
 
 		#endregion
@@ -111,7 +138,7 @@ namespace SkiaTest
 		/// <summary>
 		/// Start benchmarking process.
 		/// </summary>
-		/// <param name="ctrl">1 for SKGL, 2 for SK and 3 for GDI+.</param>
+		/// <param name="ctrl">1 for SKGL, 2 for SK, 3 for GDI+ and 4 for DirectX.</param>
 		void startBenchmarking(int ctrl)
 		{
 			btnSettings.Enabled = false;
@@ -134,8 +161,13 @@ namespace SkiaTest
 					break;
 
 				case 3:
-					control = gControl1;
+					control = doubleBufferedControl1;
 					msg = "GDI+: ";
+					break;
+
+				case 4:
+					control = d2dTest1;
+					msg = "DirectX: ";
 					break;
 
 				default:
@@ -176,15 +208,19 @@ namespace SkiaTest
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			Lines = 2000;
+			Lines = 1000;
 			Runs = 500;
+			
+			// changing size is necessary otherwise it doesn't work correctly (idk why)
+			d2dTest1.Size = Size.Empty;
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			skglControl1.Dispose();
 			skControl1.Dispose();
-			gControl1.Dispose();
+			doubleBufferedControl1.Dispose();
+			d2dTest1.Dispose();
 		}
 
 		private void btnSettings_Click(object sender, EventArgs e)
@@ -207,6 +243,7 @@ namespace SkiaTest
 			if (rbSKGL.Checked) _ct = 1;
 			if (rbSK.Checked) _ct = 2;
 			if (rbGDI.Checked) _ct = 3;
+			if (rbDX.Checked) _ct = 4;
 			StopFlag = false;
 			startBenchmarking(_ct);
 		}
@@ -215,5 +252,6 @@ namespace SkiaTest
 		{
 			StopFlag = true;
 		}
+
 	}
 }

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace SkiaTest
 {
-	public partial class gControl : UserControl
+	public partial class DoubleBufferedControl : UserControl
 	{
-		public gControl()
+		public DoubleBufferedControl()
 		{
 			InitializeComponent();
 			SetStyle(ControlStyles.AllPaintingInWmPaint, true);

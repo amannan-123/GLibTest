@@ -30,9 +30,10 @@
 		{
 			this.skglControl1 = new SkiaSharp.Views.Desktop.SKGLControl();
 			this.skControl1 = new SkiaSharp.Views.Desktop.SKControl();
-			this.gControl1 = new SkiaTest.gControl();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.d2dTest1 = new SkiaTest.D2DControl();
+			this.doubleBufferedControl1 = new SkiaTest.DoubleBufferedControl();
 			this.btnSettings = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.lstResults = new System.Windows.Forms.ListBox();
@@ -41,6 +42,7 @@
 			this.rbGDI = new System.Windows.Forms.RadioButton();
 			this.btnStart = new System.Windows.Forms.Button();
 			this.btnStop = new System.Windows.Forms.Button();
+			this.rbDX = new System.Windows.Forms.RadioButton();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -53,7 +55,7 @@
 			this.skglControl1.Location = new System.Drawing.Point(4, 3);
 			this.skglControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
 			this.skglControl1.Name = "skglControl1";
-			this.skglControl1.Size = new System.Drawing.Size(446, 139);
+			this.skglControl1.Size = new System.Drawing.Size(446, 103);
 			this.skglControl1.TabIndex = 0;
 			this.skglControl1.VSync = false;
 			this.skglControl1.PaintSurface += new System.EventHandler<SkiaSharp.Views.Desktop.SKPaintGLSurfaceEventArgs>(this.skglControl1_PaintSurface);
@@ -64,24 +66,12 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.skControl1.BackColor = System.Drawing.Color.Black;
-			this.skControl1.Location = new System.Drawing.Point(3, 148);
+			this.skControl1.Location = new System.Drawing.Point(3, 112);
 			this.skControl1.Name = "skControl1";
-			this.skControl1.Size = new System.Drawing.Size(448, 139);
+			this.skControl1.Size = new System.Drawing.Size(448, 103);
 			this.skControl1.TabIndex = 2;
 			this.skControl1.Text = "skControl1";
 			this.skControl1.PaintSurface += new System.EventHandler<SkiaSharp.Views.Desktop.SKPaintSurfaceEventArgs>(this.skControl1_PaintSurface);
-			// 
-			// gControl1
-			// 
-			this.gControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gControl1.BackColor = System.Drawing.Color.Black;
-			this.gControl1.Location = new System.Drawing.Point(3, 293);
-			this.gControl1.Name = "gControl1";
-			this.gControl1.Size = new System.Drawing.Size(448, 141);
-			this.gControl1.TabIndex = 6;
-			this.gControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.gControl1_Paint);
 			// 
 			// label1
 			// 
@@ -103,15 +93,38 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.skglControl1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.skControl1, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.gControl1, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.d2dTest1, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.doubleBufferedControl1, 0, 2);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 3;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+			this.tableLayoutPanel1.RowCount = 4;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 437);
 			this.tableLayoutPanel1.TabIndex = 8;
+			// 
+			// d2dTest1
+			// 
+			this.d2dTest1.BackColor = System.Drawing.Color.Black;
+			this.d2dTest1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.d2dTest1.Location = new System.Drawing.Point(3, 330);
+			this.d2dTest1.Name = "d2dTest1";
+			this.d2dTest1.Size = new System.Drawing.Size(448, 104);
+			this.d2dTest1.TabIndex = 7;
+			this.d2dTest1.Text = "d2dTest1";
+			this.d2dTest1.OnRendering += new SkiaTest.D2DControl.Render(this.d2dTest1_OnRendering);
+			// 
+			// doubleBufferedControl1
+			// 
+			this.doubleBufferedControl1.BackColor = System.Drawing.Color.Black;
+			this.doubleBufferedControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.doubleBufferedControl1.Location = new System.Drawing.Point(3, 221);
+			this.doubleBufferedControl1.Name = "doubleBufferedControl1";
+			this.doubleBufferedControl1.Size = new System.Drawing.Size(448, 103);
+			this.doubleBufferedControl1.TabIndex = 8;
+			this.doubleBufferedControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.gControl1_Paint);
 			// 
 			// btnSettings
 			// 
@@ -186,7 +199,7 @@
 			// btnStart
 			// 
 			this.btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnStart.Location = new System.Drawing.Point(574, 64);
+			this.btnStart.Location = new System.Drawing.Point(654, 64);
 			this.btnStart.Name = "btnStart";
 			this.btnStart.Size = new System.Drawing.Size(50, 23);
 			this.btnStart.TabIndex = 3;
@@ -198,13 +211,24 @@
 			// 
 			this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnStop.Enabled = false;
-			this.btnStop.Location = new System.Drawing.Point(630, 64);
+			this.btnStop.Location = new System.Drawing.Point(710, 64);
 			this.btnStop.Name = "btnStop";
 			this.btnStop.Size = new System.Drawing.Size(50, 23);
 			this.btnStop.TabIndex = 4;
 			this.btnStop.Text = "Stop";
 			this.btnStop.UseVisualStyleBackColor = true;
 			this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+			// 
+			// rbDX
+			// 
+			this.rbDX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.rbDX.AutoSize = true;
+			this.rbDX.Location = new System.Drawing.Point(489, 64);
+			this.rbDX.Name = "rbDX";
+			this.rbDX.Size = new System.Drawing.Size(63, 19);
+			this.rbDX.TabIndex = 1;
+			this.rbDX.Text = "DirectX";
+			this.rbDX.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
@@ -214,6 +238,7 @@
 			this.Controls.Add(this.btnStop);
 			this.Controls.Add(this.btnStart);
 			this.Controls.Add(this.rbGDI);
+			this.Controls.Add(this.rbDX);
 			this.Controls.Add(this.rbSK);
 			this.Controls.Add(this.rbSKGL);
 			this.Controls.Add(this.lstResults);
@@ -236,7 +261,6 @@
 
 		private SkiaSharp.Views.Desktop.SKGLControl skglControl1;
 		private SkiaSharp.Views.Desktop.SKControl skControl1;
-		private gControl gControl1;
 		private Label label1;
 		private TableLayoutPanel tableLayoutPanel1;
 		private Button btnSettings;
@@ -247,5 +271,8 @@
 		private RadioButton rbGDI;
 		private Button btnStart;
 		private Button btnStop;
+		private D2DControl d2dTest1;
+		private RadioButton rbDX;
+		private DoubleBufferedControl doubleBufferedControl1;
 	}
 }
