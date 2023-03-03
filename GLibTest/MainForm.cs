@@ -1,5 +1,4 @@
 using SkiaSharp;
-using System;
 using System.Diagnostics;
 using unvell.D2DLib;
 
