@@ -25,29 +25,29 @@ namespace SkiaTest
 		{
 
 			SKCanvas canvas = e.Surface.Canvas;
-			canvas.Clear(SKColors.Red);
-			using SKPaint paint = new();
-			paint.IsAntialias = true;
-			paint.Style = SKPaintStyle.Stroke;
 			for (int i = 0; i < Lines; i++)
 			{
+				SKPaint paint = new()
+				{
+					IsAntialias = true,
+					Style = SKPaintStyle.Stroke,
+					Color = new SKColor(
+						red: (byte)rand.Next(255),
+						green: (byte)rand.Next(255),
+						blue: (byte)rand.Next(255),
+						alpha: (byte)rand.Next(255)),
 
-				paint.Color = new SKColor(
-					red: (byte)rand.Next(255),
-					green: (byte)rand.Next(255),
-					blue: (byte)rand.Next(255),
-					alpha: (byte)rand.Next(255));
+					StrokeWidth = rand.Next(1, 10)
+				};
 
-				paint.StrokeWidth = rand.Next(1, 10);
-
-
-				float x1 = (float)(rand.NextDouble() * skglControl1.Width);
-				float x2 = (float)(rand.NextDouble() * skglControl1.Width);
-				float y1 = (float)(rand.NextDouble() * skglControl1.Height);
-				float y2 = (float)(rand.NextDouble() * skglControl1.Height);
+				float x1 = (float)(rand.NextDouble() * skglPnl.Width);
+				float x2 = (float)(rand.NextDouble() * skglPnl.Width);
+				float y1 = (float)(rand.NextDouble() * skglPnl.Height);
+				float y2 = (float)(rand.NextDouble() * skglPnl.Height);
 				canvas.DrawLine(x1, y1, x2, y2, paint);
+
+				paint.Dispose();
 			}
-			paint.Dispose();
 
 		}
 
@@ -55,29 +55,29 @@ namespace SkiaTest
 		{
 
 			SKCanvas canvas = e.Surface.Canvas;
-			canvas.Clear(SKColors.Red);
-			using SKPaint paint = new();
-			paint.IsAntialias = true;
-			paint.Style = SKPaintStyle.Stroke;
 			for (int i = 0; i < Lines; i++)
 			{
+				SKPaint paint = new()
+				{
+					IsAntialias = true,
+					Style = SKPaintStyle.Stroke,
+					Color = new SKColor(
+						red: (byte)rand.Next(255),
+						green: (byte)rand.Next(255),
+						blue: (byte)rand.Next(255),
+						alpha: (byte)rand.Next(255)),
 
-				paint.Color = new SKColor(
-					red: (byte)rand.Next(255),
-					green: (byte)rand.Next(255),
-					blue: (byte)rand.Next(255),
-					alpha: (byte)rand.Next(255));
+					StrokeWidth = rand.Next(1, 10)
+				};
 
-				paint.StrokeWidth = rand.Next(1, 10);
-
-
-				float x1 = (float)(rand.NextDouble() * skControl1.Width);
-				float x2 = (float)(rand.NextDouble() * skControl1.Width);
-				float y1 = (float)(rand.NextDouble() * skControl1.Height);
-				float y2 = (float)(rand.NextDouble() * skControl1.Height);
+				float x1 = (float)(rand.NextDouble() * skPnl.Width);
+				float x2 = (float)(rand.NextDouble() * skPnl.Width);
+				float y1 = (float)(rand.NextDouble() * skPnl.Height);
+				float y2 = (float)(rand.NextDouble() * skPnl.Height);
 				canvas.DrawLine(x1, y1, x2, y2, paint);
+
+				paint.Dispose();
 			}
-			paint.Dispose();
 
 		}
 
@@ -85,50 +85,79 @@ namespace SkiaTest
 		{
 			Graphics g = e.Graphics;
 			g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-			g.Clear(Color.Red);
-			using Pen paint = new(Color.Empty);
+
 			for (int i = 0; i < Lines; i++)
 			{
-
-				paint.Color = Color.FromArgb(
+				Pen paint = new(Color.FromArgb(
 					(byte)rand.Next(255),
 					(byte)rand.Next(255),
 					(byte)rand.Next(255),
-					(byte)rand.Next(255));
+					(byte)rand.Next(255)))
+				{
+					Width = rand.Next(1, 10)
+				};
 
-				paint.Width = rand.Next(1, 10);
 
-
-				float x1 = (float)(rand.NextDouble() * skControl1.Width);
-				float x2 = (float)(rand.NextDouble() * skControl1.Width);
-				float y1 = (float)(rand.NextDouble() * skControl1.Height);
-				float y2 = (float)(rand.NextDouble() * skControl1.Height);
+				float x1 = (float)(rand.NextDouble() * skPnl.Width);
+				float x2 = (float)(rand.NextDouble() * skPnl.Width);
+				float y1 = (float)(rand.NextDouble() * skPnl.Height);
+				float y2 = (float)(rand.NextDouble() * skPnl.Height);
 				g.DrawLine(paint, x1, y1, x2, y2);
+
+				paint.Dispose();
 			}
-			paint.Dispose();
 
 		}
 
 		private void d2dTest1_OnRendering(Object sender, D2DGraphics g)
 		{
 			g.Antialias = true;
-			g.Clear(D2DColor.Red);
+
 			for (int i = 0; i < Lines; i++)
 			{
 				D2DColor randCol = new(
-					(float)rand.Next(100) / 100,
-					(float)rand.Next(100) / 100,
-					(float)rand.Next(100) / 100,
-					(float)rand.Next(100) / 100);
+					(float)rand.NextDouble(),
+					(float)rand.NextDouble(),
+					(float)rand.NextDouble(),
+					(float)rand.NextDouble());
 
 				int penWidth = rand.Next(1, 10);
 
-				float x1 = (float)(rand.NextDouble() * d2dTest1.Width);
-				float x2 = (float)(rand.NextDouble() * d2dTest1.Width);
-				float y1 = (float)(rand.NextDouble() * d2dTest1.Height);
-				float y2 = (float)(rand.NextDouble() * d2dTest1.Height);
+				float x1 = (float)(rand.NextDouble() * d2dPnl.Width);
+				float x2 = (float)(rand.NextDouble() * d2dPnl.Width);
+				float y1 = (float)(rand.NextDouble() * d2dPnl.Height);
+				float y2 = (float)(rand.NextDouble() * d2dPnl.Height);
 				g.DrawLine(x1, x2, y1, y2, randCol, penWidth);
 			}
+		}
+		private void doubleBufferedControl2_Paint(object sender, PaintEventArgs e)
+		{
+			Graphics g = e.Graphics;
+			Cairo.Surface surface = new Cairo.Win32Surface(g.GetHdc());
+			Cairo.Context cr = new(surface)
+			{
+				Antialias = Cairo.Antialias.Subpixel
+			};
+
+			for (int i = 0; i < Lines; i++)
+			{
+				cr.LineWidth = rand.Next(1, 10);
+
+				float x1 = (float)(rand.NextDouble() * CairoPnl.Width);
+				float x2 = (float)(rand.NextDouble() * CairoPnl.Width);
+				float y1 = (float)(rand.NextDouble() * CairoPnl.Height);
+				float y2 = (float)(rand.NextDouble() * CairoPnl.Height);
+
+				cr.MoveTo(x1, y1);
+				cr.LineTo(x2, y2);
+				cr.SetSourceRGBA(rand.NextDouble(), rand.NextDouble(), rand.NextDouble(), rand.NextDouble());
+				cr.Stroke();
+			}
+
+			cr.Dispose();
+			surface.Dispose();
+			g.ReleaseHdc();
+
 		}
 
 		#endregion
@@ -138,7 +167,7 @@ namespace SkiaTest
 		/// <summary>
 		/// Start benchmarking process.
 		/// </summary>
-		/// <param name="ctrl">1 for SKGL, 2 for SK, 3 for GDI+ and 4 for DirectX.</param>
+		/// <param name="ctrl">1 for SKGL, 2 for SK, 3 for GDI+, 4 for DirectX and 5 for Cairo.</param>
 		void startBenchmarking(int ctrl)
 		{
 			btnSettings.Enabled = false;
@@ -151,23 +180,28 @@ namespace SkiaTest
 			switch (ctrl)
 			{
 				case 1:
-					control = skglControl1;
+					control = skglPnl;
 					msg = "Skia + OpenGL: ";
 					break;
 
 				case 2:
-					control = skControl1;
+					control = skPnl;
 					msg = "Skia: ";
 					break;
 
 				case 3:
-					control = doubleBufferedControl1;
+					control = gdiPnl;
 					msg = "GDI+: ";
 					break;
 
 				case 4:
-					control = d2dTest1;
+					control = d2dPnl;
 					msg = "DirectX: ";
+					break;
+
+				case 5:
+					control = CairoPnl;
+					msg = "Cairo: ";
 					break;
 
 				default:
@@ -210,17 +244,19 @@ namespace SkiaTest
 		{
 			Lines = 1000;
 			Runs = 500;
-			
+
 			// changing size is necessary otherwise it doesn't work correctly (idk why)
-			d2dTest1.Size = Size.Empty;
+			d2dPnl.Size = Size.Empty;
+
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			skglControl1.Dispose();
-			skControl1.Dispose();
-			doubleBufferedControl1.Dispose();
-			d2dTest1.Dispose();
+			skglPnl.Dispose();
+			skPnl.Dispose();
+			gdiPnl.Dispose();
+			d2dPnl.Dispose();
+			CairoPnl.Dispose();
 		}
 
 		private void btnSettings_Click(object sender, EventArgs e)
@@ -228,12 +264,12 @@ namespace SkiaTest
 			SettingsDialog st = new();
 			st.nRuns.Value = Runs;
 			st.nLines.Value = Lines;
-			st.btnVSync.Checked = skglControl1.VSync;
+			st.btnVSync.Checked = skglPnl.VSync;
 			if (st.ShowDialog() == DialogResult.OK)
 			{
 				Runs = (int)st.nRuns.Value;
 				Lines = (int)st.nLines.Value;
-				skglControl1.VSync = st.btnVSync.Checked;
+				skglPnl.VSync = st.btnVSync.Checked;
 			}
 		}
 
@@ -244,6 +280,7 @@ namespace SkiaTest
 			if (rbSK.Checked) _ct = 2;
 			if (rbGDI.Checked) _ct = 3;
 			if (rbDX.Checked) _ct = 4;
+			if (rbCairo.Checked) _ct = 5;
 			StopFlag = false;
 			startBenchmarking(_ct);
 		}

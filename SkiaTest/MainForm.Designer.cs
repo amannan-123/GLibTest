@@ -28,12 +28,13 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.skglControl1 = new SkiaSharp.Views.Desktop.SKGLControl();
-			this.skControl1 = new SkiaSharp.Views.Desktop.SKControl();
+			this.skglPnl = new SkiaSharp.Views.Desktop.SKGLControl();
+			this.skPnl = new SkiaSharp.Views.Desktop.SKControl();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.d2dTest1 = new SkiaTest.D2DControl();
-			this.doubleBufferedControl1 = new SkiaTest.DoubleBufferedControl();
+			this.d2dPnl = new SkiaTest.D2DControl();
+			this.gdiPnl = new SkiaTest.DoubleBufferedControl();
+			this.CairoPnl = new SkiaTest.DoubleBufferedControl();
 			this.btnSettings = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.lstResults = new System.Windows.Forms.ListBox();
@@ -43,35 +44,36 @@
 			this.btnStart = new System.Windows.Forms.Button();
 			this.btnStop = new System.Windows.Forms.Button();
 			this.rbDX = new System.Windows.Forms.RadioButton();
+			this.rbCairo = new System.Windows.Forms.RadioButton();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// skglControl1
+			// skglPnl
 			// 
-			this.skglControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.skglPnl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.skglControl1.BackColor = System.Drawing.Color.Black;
-			this.skglControl1.Location = new System.Drawing.Point(4, 3);
-			this.skglControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-			this.skglControl1.Name = "skglControl1";
-			this.skglControl1.Size = new System.Drawing.Size(446, 103);
-			this.skglControl1.TabIndex = 0;
-			this.skglControl1.VSync = false;
-			this.skglControl1.PaintSurface += new System.EventHandler<SkiaSharp.Views.Desktop.SKPaintGLSurfaceEventArgs>(this.skglControl1_PaintSurface);
+			this.skglPnl.BackColor = System.Drawing.Color.Black;
+			this.skglPnl.Location = new System.Drawing.Point(4, 3);
+			this.skglPnl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+			this.skglPnl.Name = "skglPnl";
+			this.skglPnl.Size = new System.Drawing.Size(446, 81);
+			this.skglPnl.TabIndex = 0;
+			this.skglPnl.VSync = false;
+			this.skglPnl.PaintSurface += new System.EventHandler<SkiaSharp.Views.Desktop.SKPaintGLSurfaceEventArgs>(this.skglControl1_PaintSurface);
 			// 
-			// skControl1
+			// skPnl
 			// 
-			this.skControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.skPnl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.skControl1.BackColor = System.Drawing.Color.Black;
-			this.skControl1.Location = new System.Drawing.Point(3, 112);
-			this.skControl1.Name = "skControl1";
-			this.skControl1.Size = new System.Drawing.Size(448, 103);
-			this.skControl1.TabIndex = 2;
-			this.skControl1.Text = "skControl1";
-			this.skControl1.PaintSurface += new System.EventHandler<SkiaSharp.Views.Desktop.SKPaintSurfaceEventArgs>(this.skControl1_PaintSurface);
+			this.skPnl.BackColor = System.Drawing.Color.Black;
+			this.skPnl.Location = new System.Drawing.Point(3, 90);
+			this.skPnl.Name = "skPnl";
+			this.skPnl.Size = new System.Drawing.Size(448, 81);
+			this.skPnl.TabIndex = 2;
+			this.skPnl.Text = "skControl1";
+			this.skPnl.PaintSurface += new System.EventHandler<SkiaSharp.Views.Desktop.SKPaintSurfaceEventArgs>(this.skControl1_PaintSurface);
 			// 
 			// label1
 			// 
@@ -91,40 +93,51 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.skglControl1, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.skControl1, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.d2dTest1, 0, 3);
-			this.tableLayoutPanel1.Controls.Add(this.doubleBufferedControl1, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.skglPnl, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.skPnl, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.d2dPnl, 0, 3);
+			this.tableLayoutPanel1.Controls.Add(this.gdiPnl, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.CairoPnl, 0, 4);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 4;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(454, 437);
 			this.tableLayoutPanel1.TabIndex = 8;
 			// 
-			// d2dTest1
+			// d2dPnl
 			// 
-			this.d2dTest1.BackColor = System.Drawing.Color.Black;
-			this.d2dTest1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.d2dTest1.Location = new System.Drawing.Point(3, 330);
-			this.d2dTest1.Name = "d2dTest1";
-			this.d2dTest1.Size = new System.Drawing.Size(448, 104);
-			this.d2dTest1.TabIndex = 7;
-			this.d2dTest1.Text = "d2dTest1";
-			this.d2dTest1.OnRendering += new SkiaTest.D2DControl.Render(this.d2dTest1_OnRendering);
+			this.d2dPnl.BackColor = System.Drawing.Color.Black;
+			this.d2dPnl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.d2dPnl.Location = new System.Drawing.Point(3, 264);
+			this.d2dPnl.Name = "d2dPnl";
+			this.d2dPnl.Size = new System.Drawing.Size(448, 81);
+			this.d2dPnl.TabIndex = 7;
+			this.d2dPnl.OnRendering += new SkiaTest.D2DControl.Render(this.d2dTest1_OnRendering);
 			// 
-			// doubleBufferedControl1
+			// gdiPnl
 			// 
-			this.doubleBufferedControl1.BackColor = System.Drawing.Color.Black;
-			this.doubleBufferedControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.doubleBufferedControl1.Location = new System.Drawing.Point(3, 221);
-			this.doubleBufferedControl1.Name = "doubleBufferedControl1";
-			this.doubleBufferedControl1.Size = new System.Drawing.Size(448, 103);
-			this.doubleBufferedControl1.TabIndex = 8;
-			this.doubleBufferedControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.gControl1_Paint);
+			this.gdiPnl.BackColor = System.Drawing.Color.Black;
+			this.gdiPnl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gdiPnl.Location = new System.Drawing.Point(3, 177);
+			this.gdiPnl.Name = "gdiPnl";
+			this.gdiPnl.Size = new System.Drawing.Size(448, 81);
+			this.gdiPnl.TabIndex = 8;
+			this.gdiPnl.Paint += new System.Windows.Forms.PaintEventHandler(this.gControl1_Paint);
+			// 
+			// CairoPnl
+			// 
+			this.CairoPnl.BackColor = System.Drawing.Color.Black;
+			this.CairoPnl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.CairoPnl.Location = new System.Drawing.Point(3, 351);
+			this.CairoPnl.Name = "CairoPnl";
+			this.CairoPnl.Size = new System.Drawing.Size(448, 83);
+			this.CairoPnl.TabIndex = 9;
+			this.CairoPnl.Paint += new System.Windows.Forms.PaintEventHandler(this.doubleBufferedControl2_Paint);
 			// 
 			// btnSettings
 			// 
@@ -230,11 +243,23 @@
 			this.rbDX.Text = "DirectX";
 			this.rbDX.UseVisualStyleBackColor = true;
 			// 
+			// rbCairo
+			// 
+			this.rbCairo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.rbCairo.AutoSize = true;
+			this.rbCairo.Location = new System.Drawing.Point(558, 64);
+			this.rbCairo.Name = "rbCairo";
+			this.rbCairo.Size = new System.Drawing.Size(53, 19);
+			this.rbCairo.TabIndex = 12;
+			this.rbCairo.Text = "Cairo";
+			this.rbCairo.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(784, 461);
+			this.Controls.Add(this.rbCairo);
 			this.Controls.Add(this.btnStop);
 			this.Controls.Add(this.btnStart);
 			this.Controls.Add(this.rbGDI);
@@ -259,8 +284,8 @@
 
 		#endregion
 
-		private SkiaSharp.Views.Desktop.SKGLControl skglControl1;
-		private SkiaSharp.Views.Desktop.SKControl skControl1;
+		private SkiaSharp.Views.Desktop.SKGLControl skglPnl;
+		private SkiaSharp.Views.Desktop.SKControl skPnl;
 		private Label label1;
 		private TableLayoutPanel tableLayoutPanel1;
 		private Button btnSettings;
@@ -271,8 +296,10 @@
 		private RadioButton rbGDI;
 		private Button btnStart;
 		private Button btnStop;
-		private D2DControl d2dTest1;
+		private D2DControl d2dPnl;
 		private RadioButton rbDX;
-		private DoubleBufferedControl doubleBufferedControl1;
+		private DoubleBufferedControl gdiPnl;
+		private DoubleBufferedControl CairoPnl;
+		private RadioButton rbCairo;
 	}
 }

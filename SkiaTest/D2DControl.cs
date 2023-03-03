@@ -3,10 +3,11 @@ using unvell.D2DLib.WinForm;
 
 namespace SkiaTest
 {
-	public class D2DControl : Control
+	public class D2DControl : UserControl
 	{
 		public D2DControl()
 		{
+		
 			SetStyle(ControlStyles.UserPaint, true);
 			SetStyle(ControlStyles.ResizeRedraw, true);
 		}
