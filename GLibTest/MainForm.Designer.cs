@@ -1,4 +1,4 @@
-﻿namespace SkiaTest
+﻿namespace GLibTest
 {
 	partial class MainForm
 	{
@@ -32,9 +32,9 @@
 			this.skPnl = new SkiaSharp.Views.Desktop.SKControl();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.d2dPnl = new SkiaTest.D2DControl();
-			this.gdiPnl = new SkiaTest.DoubleBufferedControl();
-			this.CairoPnl = new SkiaTest.DoubleBufferedControl();
+			this.d2dPnl = new GLibTest.D2DControl();
+			this.gdiPnl = new GLibTest.DoubleBufferedControl();
+			this.CairoPnl = new GLibTest.DoubleBufferedControl();
 			this.btnSettings = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.lstResults = new System.Windows.Forms.ListBox();
@@ -117,7 +117,7 @@
 			this.d2dPnl.Name = "d2dPnl";
 			this.d2dPnl.Size = new System.Drawing.Size(448, 81);
 			this.d2dPnl.TabIndex = 7;
-			this.d2dPnl.OnRendering += new SkiaTest.D2DControl.Render(this.d2dTest1_OnRendering);
+			this.d2dPnl.OnRendering += new GLibTest.D2DControl.Render(this.d2dTest1_OnRendering);
 			// 
 			// gdiPnl
 			// 

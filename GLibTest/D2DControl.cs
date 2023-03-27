@@ -1,7 +1,7 @@
 ﻿using unvell.D2DLib;
 using unvell.D2DLib.WinForm;
 
-namespace SkiaTest
+namespace GLibTest
 {
 	public class D2DControl : UserControl
 	{

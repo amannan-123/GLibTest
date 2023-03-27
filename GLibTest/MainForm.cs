@@ -2,7 +2,7 @@ using SkiaSharp;
 using System.Diagnostics;
 using unvell.D2DLib;
 
-namespace SkiaTest
+namespace GLibTest
 {
 	public partial class MainForm : Form
 	{

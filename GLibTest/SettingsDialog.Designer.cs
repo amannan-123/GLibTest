@@ -1,4 +1,4 @@
-﻿namespace SkiaTest
+﻿namespace GLibTest
 {
 	partial class SettingsDialog
 	{
