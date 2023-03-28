@@ -117,7 +117,7 @@
 			this.d2dPnl.Name = "d2dPnl";
 			this.d2dPnl.Size = new System.Drawing.Size(448, 81);
 			this.d2dPnl.TabIndex = 7;
-			this.d2dPnl.OnRendering += new GLibTest.D2DControl.Render(this.d2dTest1_OnRendering);
+			this.d2dPnl.OnRendering += new GLibTest.D2DControl.Render(this.d2dPnl_OnRendering);
 			// 
 			// gdiPnl
 			// 

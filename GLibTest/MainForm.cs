@@ -1,6 +1,8 @@
+using OpenTK.Graphics;
 using SkiaSharp;
 using System.Diagnostics;
-using unvell.D2DLib;
+using System.Numerics;
+using Vortice.Direct2D1;
 
 namespace GLibTest
 {
@@ -108,17 +110,19 @@ namespace GLibTest
 
 		}
 
-		private void d2dTest1_OnRendering(Object sender, D2DGraphics g)
+		private void d2dPnl_OnRendering(object sender, ID2D1HwndRenderTarget g)
 		{
-			g.Antialias = true;
+			g.AntialiasMode = AntialiasMode.PerPrimitive;
 
 			for (int i = 0; i < Lines; i++)
 			{
-				D2DColor randCol = new(
-					(float)rand.NextDouble(),
-					(float)rand.NextDouble(),
-					(float)rand.NextDouble(),
-					(float)rand.NextDouble());
+				Vortice.Mathematics.Color randCol = new(
+					(byte)rand.Next(255),
+					(byte)rand.Next(255),
+					(byte)rand.Next(255),
+					(byte)rand.Next(255));
+
+				ID2D1SolidColorBrush brush = g.CreateSolidColorBrush(randCol);
 
 				int penWidth = rand.Next(1, 10);
 
@@ -126,9 +130,12 @@ namespace GLibTest
 				float x2 = (float)(rand.NextDouble() * d2dPnl.Width);
 				float y1 = (float)(rand.NextDouble() * d2dPnl.Height);
 				float y2 = (float)(rand.NextDouble() * d2dPnl.Height);
-				g.DrawLine(x1, x2, y1, y2, randCol, penWidth);
+				g.DrawLine(new Vector2(x1, x2), new Vector2(y1, y2), brush, penWidth);
+
+				brush.Dispose();
 			}
 		}
+
 		private void doubleBufferedControl2_Paint(object sender, PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
@@ -243,10 +250,6 @@ namespace GLibTest
 		{
 			Lines = 1000;
 			Runs = 500;
-
-			// changing size is necessary otherwise it doesn't work correctly (idk why)
-			d2dPnl.Size = Size.Empty;
-
 		}
 
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)

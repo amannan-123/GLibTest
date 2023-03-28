@@ -1,86 +1,79 @@
-﻿using unvell.D2DLib;
-using unvell.D2DLib.WinForm;
+﻿using System.Drawing;
+using Vortice.DCommon;
+using Vortice.Direct2D1;
 
 namespace GLibTest
 {
-	public class D2DControl : UserControl
+	public partial class D2DControl : UserControl
 	{
+		private ID2D1HwndRenderTarget? hwndRenderTarget;
+		private ID2D1Factory? direct2DFactory;
+
 		public D2DControl()
 		{
-		
-			SetStyle(ControlStyles.UserPaint, true);
-			SetStyle(ControlStyles.ResizeRedraw, true);
+			InitializeComponent();
 		}
 
-		private D2DDevice? device;
-
-		public D2DDevice Device
+		protected override void OnHandleCreated(EventArgs e)
 		{
-			get
+			base.OnHandleCreated(e);
+			CreateResources();
+		}
+
+		protected override void OnHandleDestroyed(EventArgs e)
+		{
+			base.OnHandleDestroyed(e);
+			hwndRenderTarget?.Dispose();
+			direct2DFactory?.Dispose();
+		}
+
+		private void CreateResources()
+		{
+			direct2DFactory = D2D1.D2D1CreateFactory<ID2D1Factory>(Vortice.Direct2D1.FactoryType.MultiThreaded);
+			RenderTargetProperties renderTargetProperties = new(PixelFormat.Premultiplied)
 			{
-				var hwnd = this.Handle;
-				this.device ??= D2DDevice.FromHwnd(hwnd);
-				return this.device;
-			}
+				DpiX = DeviceDpi,
+				DpiY = DeviceDpi,
+				Type = RenderTargetType.Hardware,
+				Usage = RenderTargetUsage.None,
+			};
+			HwndRenderTargetProperties hwndRenderTargetProperties = new()
+			{
+				Hwnd = Handle,
+				PixelSize = Size,
+				PresentOptions = PresentOptions.None
+			};
+			hwndRenderTarget = direct2DFactory.CreateHwndRenderTarget(renderTargetProperties, hwndRenderTargetProperties);
 		}
 
-		private D2DGraphics? graphics;
 
-		protected override void CreateHandle()
-		{
-			base.CreateHandle();
-
-			this.DoubleBuffered = false;
-
-			this.device ??= D2DDevice.FromHwnd(this.Handle);
-
-			this.graphics = new D2DGraphics(this.device);
-
-		}
-
-		public delegate void Render(Object sender, D2DGraphics g);  // delegate
+		public delegate void Render(Object sender, ID2D1HwndRenderTarget g);  // delegate
 		public event Render? OnRendering;
 
-		protected override void OnPaintBackground(PaintEventArgs e) { }
+		protected override void OnPaintBackground(PaintEventArgs e)
+		{
+		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (this.graphics == null) return;
+			base.OnPaint(e);
 
-			this.graphics.BeginRender();
-			OnRendering?.Invoke(this, this.graphics);
-			this.graphics.EndRender();
+			if (hwndRenderTarget == null)
+				return;
+
+			hwndRenderTarget?.BeginDraw();
+			OnRendering?.Invoke(this, hwndRenderTarget!);
+			hwndRenderTarget?.EndDraw();
 		}
 
-		protected override void DestroyHandle()
+		protected virtual void OnRender(ID2D1RenderTarget g) { }
+
+		protected override void OnResize(EventArgs e)
 		{
-			base.DestroyHandle();
-			this.device?.Dispose();
+			base.OnResize(e);
+			hwndRenderTarget?.Resize(Size);
+			Invalidate();
 		}
 
-		protected virtual void OnRender(D2DGraphics g) { }
-
-		protected override void WndProc(ref Message m)
-		{
-			switch (m.Msg)
-			{
-				case (int)Win32.WMessages.WM_ERASEBKGND:
-					break;
-
-				case (int)Win32.WMessages.WM_SIZE:
-					base.WndProc(ref m);
-					this.device?.Resize();
-					break;
-
-				default:
-					base.WndProc(ref m);
-					break;
-			}
-		}
-
-		public new void Invalidate()
-		{
-			base.Invalidate(false);
-		}
 	}
 }
