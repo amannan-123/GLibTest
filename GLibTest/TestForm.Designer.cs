@@ -38,7 +38,7 @@
 			d2dControl1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 			d2dControl1.Location = new Point(12, 38);
 			d2dControl1.Name = "d2dControl1";
-			d2dControl1.Size = new Size(660, 634);
+			d2dControl1.Size = new Size(660, 660);
 			d2dControl1.TabIndex = 0;
 			d2dControl1.VSync = false;
 			d2dControl1.OnRendering += d2dControl1_OnRendering;
@@ -65,7 +65,7 @@
 			// 
 			AutoScaleDimensions = new SizeF(7F, 15F);
 			AutoScaleMode = AutoScaleMode.Font;
-			ClientSize = new Size(684, 684);
+			ClientSize = new Size(684, 710);
 			Controls.Add(label1);
 			Controls.Add(cStrokeStyle);
 			Controls.Add(d2dControl1);

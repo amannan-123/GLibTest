@@ -105,7 +105,7 @@ namespace GLibTest.GeometryHelpers
 			return pathGeometry;
 		}
 
-		public static ID2D1PathGeometry CreateStar(ID2D1RenderTarget renderTarget, Vector2 center, float innerRadiusX, float innerRadiusY, float outerRadiusX, float outerRadiusY, int spikes)
+		public static ID2D1PathGeometry1? CreateStar(ID2D1RenderTarget renderTarget, Vector2 center, float innerRadiusX, float innerRadiusY, float outerRadiusX, float outerRadiusY, int spikes)
 		{
 			// Validate the number of spikes
 			if (spikes < 3) throw new ArgumentException("The number of spikes must be at least 3.", nameof(spikes));
@@ -113,7 +113,8 @@ namespace GLibTest.GeometryHelpers
 				throw new ArgumentException("All radii must be greater than 0.");
 
 			// Create a path geometry
-			ID2D1PathGeometry starGeometry = renderTarget.Factory.CreatePathGeometry();
+			using ID2D1Factory8 factory1 = renderTarget.Factory.QueryInterface<ID2D1Factory8>();
+			ID2D1PathGeometry1 starGeometry = factory1.CreatePathGeometry();
 
 			// Open the geometry for editing
 			using ID2D1GeometrySink sink = starGeometry.Open();
