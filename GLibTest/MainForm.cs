@@ -1,6 +1,7 @@
-using OpenTK.Graphics;
 using SkiaSharp;
+using SkiaSharp.Views.Desktop;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Numerics;
 using Vortice.Direct2D1;
 
@@ -8,11 +9,11 @@ namespace GLibTest
 {
 	public partial class MainForm : Form
 	{
-		readonly Random rand = new();
-		readonly List<double> renderTimesMsec = new();
+		private readonly Random _rand = new();
+		private readonly List<double> _renderTimesMSec = [];
 
-		public int Lines { get; set; }
-		public int Runs { get; set; }
+		public int Lines { get; set; } = 5000;
+		public int Runs { get; set; } = 500;
 		public bool StopFlag = false;
 
 		public MainForm()
@@ -22,10 +23,13 @@ namespace GLibTest
 
 		#region Drawing
 
-		private void skglControl1_PaintSurface(object sender, SkiaSharp.Views.Desktop.SKPaintGLSurfaceEventArgs e)
+		private void skglControl1_PaintSurface(object sender, SKPaintGLSurfaceEventArgs e)
 		{
-
+			
 			SKCanvas canvas = e.Surface.Canvas;
+
+			canvas.Clear(SKColors.Black);
+
 			for (int i = 0; i < Lines; i++)
 			{
 				SKPaint paint = new()
@@ -33,18 +37,18 @@ namespace GLibTest
 					IsAntialias = true,
 					Style = SKPaintStyle.Stroke,
 					Color = new SKColor(
-						red: (byte)rand.Next(255),
-						green: (byte)rand.Next(255),
-						blue: (byte)rand.Next(255),
-						alpha: (byte)rand.Next(255)),
+						red: (byte)_rand.Next(255),
+						green: (byte)_rand.Next(255),
+						blue: (byte)_rand.Next(255),
+						alpha: (byte)_rand.Next(255)),
 
-					StrokeWidth = rand.Next(1, 10)
+					StrokeWidth = _rand.Next(1, 10)
 				};
 
-				float x1 = (float)(rand.NextDouble() * skglPnl.Width);
-				float x2 = (float)(rand.NextDouble() * skglPnl.Width);
-				float y1 = (float)(rand.NextDouble() * skglPnl.Height);
-				float y2 = (float)(rand.NextDouble() * skglPnl.Height);
+				float x1 = _rand.NextSingle() * skglPnl.Width;
+				float x2 = _rand.NextSingle() * skglPnl.Width;
+				float y1 = _rand.NextSingle() * skglPnl.Height;
+				float y2 = _rand.NextSingle() * skglPnl.Height;
 				canvas.DrawLine(x1, y1, x2, y2, paint);
 
 				paint.Dispose();
@@ -52,10 +56,13 @@ namespace GLibTest
 
 		}
 
-		private void skControl1_PaintSurface(object sender, SkiaSharp.Views.Desktop.SKPaintSurfaceEventArgs e)
+		private void skControl1_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
 		{
 
 			SKCanvas canvas = e.Surface.Canvas;
+
+			canvas.Clear(SKColors.Black);
+
 			for (int i = 0; i < Lines; i++)
 			{
 				SKPaint paint = new()
@@ -63,18 +70,19 @@ namespace GLibTest
 					IsAntialias = true,
 					Style = SKPaintStyle.Stroke,
 					Color = new SKColor(
-						red: (byte)rand.Next(255),
-						green: (byte)rand.Next(255),
-						blue: (byte)rand.Next(255),
-						alpha: (byte)rand.Next(255)),
+						red: (byte)_rand.Next(255),
+						green: (byte)_rand.Next(255),
+						blue: (byte)_rand.Next(255),
+						alpha: (byte)_rand.Next(255)),
 
-					StrokeWidth = rand.Next(1, 10)
+					StrokeWidth = _rand.Next(1, 10)
 				};
 
-				float x1 = (float)(rand.NextDouble() * skPnl.Width);
-				float x2 = (float)(rand.NextDouble() * skPnl.Width);
-				float y1 = (float)(rand.NextDouble() * skPnl.Height);
-				float y2 = (float)(rand.NextDouble() * skPnl.Height);
+				float x1 = _rand.NextSingle() * skPnl.Width;
+				float x2 = _rand.NextSingle() * skPnl.Width;
+				float y1 = _rand.NextSingle() * skPnl.Height;
+				float y2 = _rand.NextSingle() * skPnl.Height;
+
 				canvas.DrawLine(x1, y1, x2, y2, paint);
 
 				paint.Dispose();
@@ -84,25 +92,28 @@ namespace GLibTest
 
 		private void gControl1_Paint(object sender, PaintEventArgs e)
 		{
+
 			Graphics g = e.Graphics;
-			g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+			g.SmoothingMode = SmoothingMode.AntiAlias;
+
+			g.Clear(Color.Black);
 
 			for (int i = 0; i < Lines; i++)
 			{
 				Pen paint = new(Color.FromArgb(
-					(byte)rand.Next(255),
-					(byte)rand.Next(255),
-					(byte)rand.Next(255),
-					(byte)rand.Next(255)))
+					(byte)_rand.Next(255),
+					(byte)_rand.Next(255),
+					(byte)_rand.Next(255),
+					(byte)_rand.Next(255)))
 				{
-					Width = rand.Next(1, 10)
+					Width = _rand.Next(1, 10)
 				};
 
+				float x1 = _rand.NextSingle() * gdiPnl.Width;
+				float x2 = _rand.NextSingle() * gdiPnl.Width;
+				float y1 = _rand.NextSingle() * gdiPnl.Height;
+				float y2 = _rand.NextSingle() * gdiPnl.Height;
 
-				float x1 = (float)(rand.NextDouble() * skPnl.Width);
-				float x2 = (float)(rand.NextDouble() * skPnl.Width);
-				float y1 = (float)(rand.NextDouble() * skPnl.Height);
-				float y2 = (float)(rand.NextDouble() * skPnl.Height);
 				g.DrawLine(paint, x1, y1, x2, y2);
 
 				paint.Dispose();
@@ -110,27 +121,32 @@ namespace GLibTest
 
 		}
 
-		private void d2dPnl_OnRendering(object sender, ID2D1HwndRenderTarget g)
+		private void d2dPnl_OnRendering(object sender, ID2D1DeviceContext g)
 		{
+
 			g.AntialiasMode = AntialiasMode.PerPrimitive;
+
+			g.Clear(new Vortice.Mathematics.Color(0, 0, 0, 0));
 
 			for (int i = 0; i < Lines; i++)
 			{
 				Vortice.Mathematics.Color randCol = new(
-					(byte)rand.Next(255),
-					(byte)rand.Next(255),
-					(byte)rand.Next(255),
-					(byte)rand.Next(255));
+					(byte)_rand.Next(255),
+					(byte)_rand.Next(255),
+					(byte)_rand.Next(255),
+					(byte)_rand.Next(255));
 
 				ID2D1SolidColorBrush brush = g.CreateSolidColorBrush(randCol);
 
-				int penWidth = rand.Next(1, 10);
+				int penWidth = _rand.Next(1, 10);
 
-				float x1 = (float)(rand.NextDouble() * d2dPnl.Width);
-				float x2 = (float)(rand.NextDouble() * d2dPnl.Width);
-				float y1 = (float)(rand.NextDouble() * d2dPnl.Height);
-				float y2 = (float)(rand.NextDouble() * d2dPnl.Height);
-				g.DrawLine(new Vector2(x1, x2), new Vector2(y1, y2), brush, penWidth);
+
+				float x1 = _rand.NextSingle() * d2dPnl.Width;
+				float x2 = _rand.NextSingle() * d2dPnl.Width;
+				float y1 = _rand.NextSingle() * d2dPnl.Height;
+				float y2 = _rand.NextSingle() * d2dPnl.Height;
+
+				g.DrawLine(new Vector2(x1, y1), new Vector2(x2, y2), brush, penWidth);
 
 				brush.Dispose();
 			}
@@ -138,6 +154,7 @@ namespace GLibTest
 
 		private void doubleBufferedControl2_Paint(object sender, PaintEventArgs e)
 		{
+
 			Graphics g = e.Graphics;
 			Cairo.Surface surface = new Cairo.Win32Surface(g.GetHdc());
 			Cairo.Context cr = new(surface)
@@ -145,18 +162,22 @@ namespace GLibTest
 				Antialias = Cairo.Antialias.Subpixel
 			};
 
+			cr.SetSourceRGBA(0, 0, 0, 1);
+			cr.Paint();
+
 			for (int i = 0; i < Lines; i++)
 			{
-				cr.LineWidth = rand.Next(1, 10);
+				cr.LineWidth = _rand.Next(1, 10);
 
-				float x1 = (float)(rand.NextDouble() * CairoPnl.Width);
-				float x2 = (float)(rand.NextDouble() * CairoPnl.Width);
-				float y1 = (float)(rand.NextDouble() * CairoPnl.Height);
-				float y2 = (float)(rand.NextDouble() * CairoPnl.Height);
+
+				float x1 = _rand.NextSingle() * CairoPnl.Width;
+				float x2 = _rand.NextSingle() * CairoPnl.Width;
+				float y1 = _rand.NextSingle() * CairoPnl.Height;
+				float y2 = _rand.NextSingle() * CairoPnl.Height;
 
 				cr.MoveTo(x1, y1);
 				cr.LineTo(x2, y2);
-				cr.SetSourceRGBA(rand.NextDouble(), rand.NextDouble(), rand.NextDouble(), rand.NextDouble());
+				cr.SetSourceRGBA(_rand.NextDouble(), _rand.NextDouble(), _rand.NextDouble(), _rand.NextDouble());
 				cr.Stroke();
 			}
 
@@ -174,12 +195,12 @@ namespace GLibTest
 		/// Start benchmarking process.
 		/// </summary>
 		/// <param name="ctrl">1 for SKGL, 2 for SK, 3 for GDI+, 4 for DirectX and 5 for Cairo.</param>
-		void startBenchmarking(int ctrl)
+		void StartBenchmarking(int ctrl)
 		{
 			btnSettings.Enabled = false;
 			btnStart.Enabled = false;
 			btnStop.Enabled = true;
-			renderTimesMsec.Clear();
+			_renderTimesMSec.Clear();
 			Control control;
 			string msg;
 
@@ -231,12 +252,20 @@ namespace GLibTest
 				Application.DoEvents();
 				stopwatch.Stop();
 
-				renderTimesMsec.Add(1000.0 * stopwatch.ElapsedTicks / Stopwatch.Frequency);
-				double mean = renderTimesMsec.Sum() / renderTimesMsec.Count;
-				lstResults.Items.Add($"{renderTimesMsec.Count:00}. " +
-					$"{renderTimesMsec.Last():0.000} ms " +
+				_renderTimesMSec.Add(1000.0 * stopwatch.ElapsedTicks / Stopwatch.Frequency);
+				double mean = _renderTimesMSec.Sum() / _renderTimesMSec.Count;
+				lstResults.Items.Add($"{_renderTimesMSec.Count:00}. " +
+					$"{_renderTimesMSec.Last():0.000} ms " +
 					$"(running mean: {mean:0.000} ms)");
 				lstResults.SelectedIndex = lstResults.Items.Count - 1;
+
+				//if last run, print average FPS
+				if (i == Runs - 1)
+				{
+					double avg = 1000 / mean;
+					lstResults.Items.Add($"Average FPS: {avg:0.00}");
+					lstResults.SelectedIndex = lstResults.Items.Count - 1;
+				}
 			}
 
 			btnSettings.Enabled = true;
@@ -246,13 +275,7 @@ namespace GLibTest
 
 		#endregion
 
-		private void Form1_Load(object sender, EventArgs e)
-		{
-			Lines = 1000;
-			Runs = 500;
-		}
-
-		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+		private void TestForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			skglPnl.Dispose();
 			skPnl.Dispose();
@@ -267,24 +290,23 @@ namespace GLibTest
 			st.nRuns.Value = Runs;
 			st.nLines.Value = Lines;
 			st.btnVSync.Checked = skglPnl.VSync;
-			if (st.ShowDialog() == DialogResult.OK)
-			{
-				Runs = (int)st.nRuns.Value;
-				Lines = (int)st.nLines.Value;
-				skglPnl.VSync = st.btnVSync.Checked;
-			}
+			if (st.ShowDialog() != DialogResult.OK) return;
+			Runs = (int)st.nRuns.Value;
+			Lines = (int)st.nLines.Value;
+			skglPnl.VSync = st.btnVSync.Checked;
+			d2dPnl.VSync = st.btnVSync.Checked;
 		}
 
 		private void btnStart_Click(object sender, EventArgs e)
 		{
-			int _ct = 0;
-			if (rbSKGL.Checked) _ct = 1;
-			if (rbSK.Checked) _ct = 2;
-			if (rbGDI.Checked) _ct = 3;
-			if (rbDX.Checked) _ct = 4;
-			if (rbCairo.Checked) _ct = 5;
+			int ct = 0;
+			if (rbSKGL.Checked) ct = 1;
+			if (rbSK.Checked) ct = 2;
+			if (rbGDI.Checked) ct = 3;
+			if (rbDX.Checked) ct = 4;
+			if (rbCairo.Checked) ct = 5;
 			StopFlag = false;
-			startBenchmarking(_ct);
+			StartBenchmarking(ct);
 		}
 
 		private void btnStop_Click(object sender, EventArgs e)
@@ -292,5 +314,9 @@ namespace GLibTest
 			StopFlag = true;
 		}
 
+		private void button1_Click(object sender, EventArgs e)
+		{
+			lstResults.Items.Clear();
+		}
 	}
 }
