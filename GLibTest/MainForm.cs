@@ -121,7 +121,7 @@ namespace GLibTest
 
 		}
 
-		private void d2dPnl_OnRendering(object sender, ID2D1DeviceContext7 g)
+		private void d2dPnl_OnRendering(object sender, ID2D1DeviceContext6 g)
 		{
 
 			g.AntialiasMode = AntialiasMode.PerPrimitive;

@@ -113,7 +113,7 @@ namespace GLibTest.GeometryHelpers
 				throw new ArgumentException("All radii must be greater than 0.");
 
 			// Create a path geometry
-			using ID2D1Factory8 factory1 = renderTarget.Factory.QueryInterface<ID2D1Factory8>();
+			using ID2D1Factory7 factory1 = renderTarget.Factory.QueryInterface<ID2D1Factory7>();
 			ID2D1PathGeometry1 starGeometry = factory1.CreatePathGeometry();
 
 			// Open the geometry for editing

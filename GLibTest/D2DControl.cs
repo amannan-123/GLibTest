@@ -11,8 +11,8 @@ namespace GLibTest
 	public partial class D2DControl : UserControl
 	{
 		private ID3D11Device5? _d3dDevice;
-		private ID2D1Factory8? _direct2DFactory;
-		private ID2D1DeviceContext7? _d2dDeviceContext;
+		private ID2D1Factory7? _direct2DFactory;
+		private ID2D1DeviceContext6? _d2dDeviceContext;
 		private IDXGISwapChain1? _swapChain;
 		private ID2D1Bitmap1? _renderTarget;
 		private bool _resizing = false;
@@ -41,7 +41,7 @@ namespace GLibTest
 		}
 
 
-		public delegate void RenderHandler(object sender, ID2D1DeviceContext7 g);
+		public delegate void RenderHandler(object sender, ID2D1DeviceContext6 g);
 		public event RenderHandler? OnRendering;
 
 		public D2DControl()
@@ -118,8 +118,8 @@ namespace GLibTest
 
 			using IDXGIDevice4 dxgiDevice = _d3dDevice.QueryInterface<IDXGIDevice4>();
 			// Create Direct2D factory and device
-			_direct2DFactory = D2D1.D2D1CreateFactory<ID2D1Factory8>(FactoryType.SingleThreaded);
-			using ID2D1Device7 d2dDevice = _direct2DFactory.CreateDevice(dxgiDevice);
+			_direct2DFactory = D2D1.D2D1CreateFactory<ID2D1Factory7>(FactoryType.SingleThreaded);
+			using ID2D1Device6 d2dDevice = _direct2DFactory.CreateDevice(dxgiDevice);
 			_d2dDeviceContext = d2dDevice.CreateDeviceContext(DeviceContextOptions.None);
 
 			CreateSwapChain(_d3dDevice);
