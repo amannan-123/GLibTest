@@ -17,7 +17,7 @@ namespace GLibTest
 
         private void d2dControl1_OnRendering(object sender, ID2D1DeviceContext6 g)
         {
-            ID2D1DeviceContext deviceContext = g;
+            ID2D1DeviceContext6 deviceContext = g;
             if (deviceContext == null) return;
 
             g.AntialiasMode = AntialiasMode.PerPrimitive;
@@ -39,7 +39,7 @@ namespace GLibTest
             ID2D1GradientStopCollection gradientStopCollection = deviceContext.CreateGradientStopCollection(stops);
             using ID2D1LinearGradientBrush lgb = deviceContext.CreateLinearGradientBrush(lgbp, gradientStopCollection);
 
-            deviceContext.FillRectangle(new Rect(0, 0, deviceContext.PixelSize.Width, deviceContext.PixelSize.Height), lgb);
+            //deviceContext.FillRectangle(new Rect(0, 0, deviceContext.PixelSize.Width, deviceContext.PixelSize.Height), lgb);
 
             // Create a compatible render target for offscreen drawing
             using ID2D1BitmapRenderTarget bitmapRenderTarget = deviceContext.CreateCompatibleRenderTarget(
@@ -56,24 +56,79 @@ namespace GLibTest
             // Begin drawing to the bitmap render target
             bitmapRenderTarget.BeginDraw();
 
+            // Assume these are your desired colors (normalized to 0-1 range)
+            // cyan, magenta, yellow, black
+            Color4 topLeftColor = new(0, 1, 1, 1);
+            Color4 topRightColor = new(1, 0, 1, 1);
+            Color4 bottomLeftColor = new(1, 1, 0, 1);
+            Color4 bottomRightColor = new(0, 0, 0, 1);
+
+            float width = deviceContext.PixelSize.Width;
+            float height = deviceContext.PixelSize.Height;
+            GradientMeshPatch patch = new()
+            {
+                // Row 0 (top edge)
+                Point00 = new Vector2(0, 0),
+                Point01 = new Vector2(0, 0),
+                Point02 = new Vector2(width, 0),
+                Point03 = new Vector2(width, 0),
+
+                // Row 1
+                Point10 = new Vector2(0, 0),
+                Point11 = new Vector2(0, 0),
+                Point12 = new Vector2(width, 0),
+                Point13 = new Vector2(width, 0),
+
+                // Row 2
+                Point20 = new Vector2(0, height),
+                Point21 = new Vector2(0, height),
+                Point22 = new Vector2(width, height),
+                Point23 = new Vector2(width, height),
+
+                // Row 3 (bottom edge)
+                Point30 = new Vector2(0, height),
+                Point31 = new Vector2(0, height),
+                Point32 = new Vector2(width, height),
+                Point33 = new Vector2(width, height),
+
+                Color00 = topLeftColor,
+                Color03 = topRightColor,
+                Color33 = bottomRightColor,
+                Color30 = bottomLeftColor,
+
+                BottomEdgeMode = PatchEdgeMode.Aliased,
+                LeftEdgeMode = PatchEdgeMode.Aliased,
+                RightEdgeMode = PatchEdgeMode.Aliased,
+                TopEdgeMode = PatchEdgeMode.Aliased,
+            };
+
+            // Create an array containing just one patch.
+            GradientMeshPatch[] patches = [patch];
+
+            // Create the gradient mesh from the patch data.
+            ID2D1GradientMesh gradientMesh = deviceContext.CreateGradientMesh(patches, 1);
+
+            // Now fill the entire drawing area with the gradient mesh.
+            deviceContext.DrawGradientMesh(gradientMesh);
+
             Vector2 center = new(bitmapRenderTarget.Size.Width / 2f, bitmapRenderTarget.Size.Height / 2f);
             float radiusX = bitmapRenderTarget.Size.Width / 4f;
             float radiusY = bitmapRenderTarget.Size.Height / 4f;
 
             // Draw a filled rectangle
             RectangleF rect = new(center.X - 100, center.Y - 100, 100, 100);
-            bitmapRenderTarget.FillRectangle(rect, solidColorBrush);
+            //bitmapRenderTarget.FillRectangle(rect, solidColorBrush);
 
             // Draw a filled ellipse overlapping the rectangle
             solidColorBrush.Color = new Color4(1f, 0f, 0f, 0.5f);
-            bitmapRenderTarget.FillEllipse(new Ellipse(center, radiusX, radiusY), solidColorBrush);
+            //bitmapRenderTarget.FillEllipse(new Ellipse(center, radiusX, radiusY), solidColorBrush);
 
             // Define the rectangle around the ellipse
             RectangleF rectt = new(center.X - radiusX, center.Y - radiusY, radiusX * 2, radiusY * 2);
 
             // Draw the rectangle (border only)
             using ID2D1SolidColorBrush borderBrush = bitmapRenderTarget.CreateSolidColorBrush(new Color4(0f, 0f, 1f, 1f));
-            bitmapRenderTarget.DrawRectangle(rectt, borderBrush, 2f);
+            //bitmapRenderTarget.DrawRectangle(rectt, borderBrush, 2f);
 
             // Skew transformation matrix
             Matrix3x2 skewMatrix = new(
@@ -89,21 +144,21 @@ namespace GLibTest
             Matrix3x2 originalTransform = bitmapRenderTarget.Transform;
 
             // Apply skew transformations
-            bitmapRenderTarget.Transform *= skewMatrix;
+            //bitmapRenderTarget.Transform *= skewMatrix;
 
             // Draw the skewed rectangle
             using ID2D1SolidColorBrush skewedBorderBrush = bitmapRenderTarget.CreateSolidColorBrush(new Color4(0f, 1f, 0f, 1f));
-            bitmapRenderTarget.DrawRectangle(new RectangleF(0, 0, rectt.Width, rectt.Height), skewedBorderBrush, 2f);
+            //bitmapRenderTarget.DrawRectangle(new RectangleF(0, 0, rectt.Width, rectt.Height), skewedBorderBrush, 2f);
 
             // Apply rotation transformations
-            bitmapRenderTarget.Transform *= rotationMatrix;
+            //bitmapRenderTarget.Transform *= rotationMatrix;
 
             // Draw the rotated rectangle
             using ID2D1SolidColorBrush rotatedBorderBrush = bitmapRenderTarget.CreateSolidColorBrush(new Color4(1f, 0f, 0f, 1f));
             bitmapRenderTarget.DrawRectangle(new RectangleF(0, 0, rectt.Width, rectt.Height), rotatedBorderBrush, 2f);
 
             // Restore the original transform
-            bitmapRenderTarget.Transform = originalTransform;
+            //bitmapRenderTarget.Transform = originalTransform;
 
             // Draw an arc geometry
             solidColorBrush.Color = new Color4(1f, 1f, 0f, 0.5f);
@@ -127,7 +182,7 @@ namespace GLibTest
             });
             if (pieGeometry != null)
             {
-                bitmapRenderTarget.DrawGeometry(pieGeometry, solidColorBrush, 10f, strokeStyle2);
+                //bitmapRenderTarget.DrawGeometry(pieGeometry, solidColorBrush, 10f, strokeStyle2);
                 //DrawPathPointsWithIndices(bitmapRenderTarget, pieGeometry);
             }
 
@@ -136,13 +191,13 @@ namespace GLibTest
             // Draw another filled rectangle
             rect = new RectangleF(center.X, center.Y, 100, 100);
             solidColorBrush.Color = new Color4(0f, 1f, 0f, 0.5f);
-            bitmapRenderTarget.FillRectangle(rect, solidColorBrush);
+            //bitmapRenderTarget.FillRectangle(rect, solidColorBrush);
 
             // Draw a vertical middle line
-            bitmapRenderTarget.DrawLine(
-                new Vector2(bitmapRenderTarget.Size.Width / 2, 0),
-                new Vector2(bitmapRenderTarget.Size.Width / 2, bitmapRenderTarget.Size.Height),
-            lineBrush, 5);
+            //bitmapRenderTarget.DrawLine(
+            //    new Vector2(bitmapRenderTarget.Size.Width / 2, 0),
+            //    new Vector2(bitmapRenderTarget.Size.Width / 2, bitmapRenderTarget.Size.Height),
+            //lineBrush, 5);
 
             // Draw a star geometry
             solidColorBrush.Color = new Color4(0, 0, 0, 0.5f);
@@ -158,21 +213,26 @@ namespace GLibTest
             // Apply a Gaussian blur effect
             using ID2D1Bitmap bitmap = bitmapRenderTarget.Bitmap;
             using GaussianBlur effect = new(deviceContext);
-            effect.SetValue((int)GaussianBlurProperties.StandardDeviation, 5f);
+            effect.SetValue((int)GaussianBlurProperties.StandardDeviation, 0f);
             effect.SetInput(0, bitmap, false);
 
+            DropShadow.Register(d2dControl1.Direct2DFactory);
+            using DropShadow dropShadow = new(deviceContext);
+            dropShadow.ShadowBlur = 10f;
+            dropShadow.SetInput(0, effect.Output, false);
+
             // Draw the blurred image to the render target
-            deviceContext.DrawImage(effect, InterpolationMode.HighQualityCubic, CompositeMode.SourceOver);
+            deviceContext.DrawImage(dropShadow, InterpolationMode.HighQualityCubic, CompositeMode.SourceOver);
             // Draw a border around the render target
             using ID2D1SolidColorBrush borderBrushh = deviceContext.CreateSolidColorBrush(new Color4(1, 0, 0, 1));
-            deviceContext.DrawRectangle(new RectangleF(0, 0, deviceContext.Size.Width, deviceContext.Size.Height), borderBrushh, 10f);
+            //deviceContext.DrawRectangle(new RectangleF(0, 0, deviceContext.Size.Width, deviceContext.Size.Height), borderBrushh, 10f);
 
             // Draw a horizontal middle line
             using ID2D1SolidColorBrush lineBrush2 = deviceContext.CreateSolidColorBrush(new Color4(1, 0, 0, 0.5f));
-            deviceContext.DrawLine(
-                new Vector2(0, deviceContext.Size.Height / 2),
-                new Vector2(deviceContext.Size.Width, deviceContext.Size.Height / 2),
-                lineBrush2, 5);
+            //deviceContext.DrawLine(
+            //    new Vector2(0, deviceContext.Size.Height / 2),
+            //    new Vector2(deviceContext.Size.Width, deviceContext.Size.Height / 2),
+            //    lineBrush2, 5);
             Debug.WriteLine("D2D Drawing complete");
         }
 
@@ -185,11 +245,63 @@ namespace GLibTest
 
         private void D2DTestForm_Click(object sender, EventArgs e)
         {
-            var currentTime = DateTime.Now;
+            DateTime currentTime = DateTime.Now;
             d2dControl1.Invalidate();
             Application.DoEvents();
             Debug.WriteLine($"Time taken: {DateTime.Now - currentTime}");
             Text = Location.ToString();
         }
     }
+
+    public class DropShadow(ID2D1DeviceContext context) : ID2D1Effect(context.CreateEffect(typeof(Implementation).GUID))
+    {
+        public static void Register(ID2D1Factory7 d2Factory)
+        {
+            d2Factory.RegisterEffect<Implementation>();
+        }
+
+        public float ShadowBlur
+        {
+            set => SetValue(0, value);
+            get => GetFloatValue(0);
+        }
+
+        [CustomEffect(1)]
+        sealed class Implementation : CustomEffectBase
+        {
+            [CustomEffectProperty(PropertyType.Float, 0)]
+            public float ShadowBlur { get; set; } = 5f;
+
+            Shadow? ShadowEffect;
+
+            public override void Initialize(ID2D1EffectContext effectContext, ID2D1TransformGraph transformGraph)
+            {
+                ShadowEffect = new Shadow(effectContext) { BlurStandardDeviation = ShadowBlur };
+                Composite CompositeEffect = new(effectContext);
+
+                ID2D1TransformNode ShadowTransform = effectContext.CreateTransformNodeFromEffect(ShadowEffect);
+                ID2D1TransformNode OffsetTransform = effectContext.CreateOffsetTransform(new Int2(10, 10));
+                ID2D1TransformNode CompositeTransform = effectContext.CreateTransformNodeFromEffect(CompositeEffect);
+
+                transformGraph.AddNode(ShadowTransform);
+                transformGraph.AddNode(OffsetTransform);
+                transformGraph.AddNode(CompositeTransform);
+
+                transformGraph.ConnectToEffectInput(0, ShadowTransform, 0);
+                transformGraph.ConnectNode(ShadowTransform, OffsetTransform, 0);
+                transformGraph.ConnectNode(OffsetTransform, CompositeTransform, 0);
+                transformGraph.ConnectToEffectInput(0, CompositeTransform, 1);
+                transformGraph.SetOutputNode(CompositeTransform);
+            }
+
+            public override void SetGraph(ID2D1TransformGraph transformGraph) { }
+
+            public override void PrepareForRender(ChangeType changeType)
+            {
+                if (changeType == ChangeType.Properties)
+                    ShadowEffect!.BlurStandardDeviation = ShadowBlur;
+            }
+        }
+    }
+
 }
